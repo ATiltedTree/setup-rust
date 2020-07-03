@@ -39,10 +39,9 @@ async function run(): Promise<void> {
     let components = core.getInput("components");
     let targets = core.getInput("targets");
 
-    await cache.restoreCache(
-      CACHE_PATH,
-      `rustup-${version}-${components.replace(" ", "-")}-${targets}`
-    );
+    const cacheKey = `rustup-${process.platform}-${version}-${components.replace(" ", "-")}-${targets}`
+
+    await cache.restoreCache(CACHE_PATH, cacheKey);
 
     let args = [
       "toolchain",
@@ -66,7 +65,7 @@ async function run(): Promise<void> {
     }
 
     core.info(
-      `Installing toolchain with components and targets: ${version} -- ${components} -- ${targets}`
+      `Installing toolchain with components and targets: ${version} -- ${process.platform} -- ${components} -- ${targets}`
     );
 
     let code = await exec("rustup", args);
@@ -83,16 +82,10 @@ async function run(): Promise<void> {
     core.info(`::add-matcher::${path.join(__dirname, "..", "rustc.json")}`);
 
     core.debug(
-      `Saving cache: rustup-${version}-${components.replace(
-        " ",
-        "-"
-      )}-${targets}`
+      `Saving cache: ${cacheKey}`
     );
     try {
-      await cache.saveCache(
-        CACHE_PATH,
-        `rustup-${version}-${components.replace(" ", "-")}-${targets}`
-      );
+      await cache.saveCache(CACHE_PATH, cacheKey);
     } catch (error) {
       core.warning(`Failed to save cache. Probably already cached: ${error}`);
     }
