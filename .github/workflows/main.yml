@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup | Node
         run: npm i
       - name: Build | Lint
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup | Node
         run: npm i
       - name: Build | Compile
@@ -33,7 +33,7 @@ jobs:
     needs: [compile]
     steps:
       - name: Setup | Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build | Test
         uses: ./
         with:
